@@ -2,7 +2,7 @@
 This API client can help you to operate with NZ Post Address Checker API. You can use any PSR-16 Simple Cache with it 
 to save your money on look ups number. 
 ## Installation
-```composer require dshumkov/nzpost-client```
+```composer require digitalpianism/nzpost-client```
 
 ## Examples
 The Address Checker API allows you to autocomplete and check New Zealand addresses and postcodes. It can be used within web forms or mobile apps. It’s backed by New Zealand Post’s National Postal Address Database (NPAD).
@@ -11,7 +11,7 @@ Firstly you have to get registered account https://www.nzpost.co.nz/business/dev
 And create new application there to get API credentials. 
 ### Auth and get the client instance 
 ```php
-use DShumkov\NzPostClient\NzPostClient;
+use DigitalPianism\NzPostClient\NzPostClient;
 
 $clientID = 'NZPOST_CLIENT_ID';
 $secret = 'NZPOST_CLIENT_SECRET';
@@ -22,7 +22,7 @@ $Client = new NzPostClient($clientID, $secret);
 ### Auth and get the client instance with PSR-16 Simple Cache
 ```php
 use Symfony\Component\Cache\Simple\FilesystemCache;
-use DShumkov\NzPostClient\NzPostClient;
+use DigitalPianism\NzPostClient\NzPostClient;
 
 $cache = new FilesystemCache();
 $ttl = 31536000; // One year cache TTL

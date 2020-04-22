@@ -1,12 +1,12 @@
 {
-    "name": "dshumkov/nzpost-client",
+    "name": "digitalpianism/nzpost-client",
     "description": "NZ Post API client",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Dmitry Shumkov",
-            "email": "d.shumkov@gmail.com"
+            "name": "Raphael Petrini",
+            "email": "contact@digital-pianism.com"
         }
     ],
     "minimum-stability": "dev",
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DShumkov\\NzPostClient\\": "src/"
+            "DigitalPianism\\NzPostClient\\": "src/"
         }
     },
     "require-dev": {

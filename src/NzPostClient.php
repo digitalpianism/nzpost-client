@@ -1,14 +1,14 @@
 <?php
 
-namespace DShumkov\NzPostClient;
+namespace DigitalPianism\NzPostClient;
 
 use Psr\SimpleCache\CacheInterface;
 
 /**
  * Class NzPostClient
- * @package DShumkov\NzPostClient
+ * @package DigitalPianism\NzPostClient
  */
-class NzPostClient implements NzPostClientInterface
+class NzPostClient
 {
     /** Cache key for auth token storage  */
     const TOKEN = 'NZ_POST_AUTH_TOKEN';
@@ -16,8 +16,11 @@ class NzPostClient implements NzPostClientInterface
     /** URL to NZ Post Auth API */
     const NZPOST_AUTH_URL = 'https://oauth.nzpost.co.nz/as/token.oauth2';
 
-    /** URL to NZ Post Address Checker API */
-    const NZPOST_API_URL = 'https://api.nzpost.co.nz/addresschecker/1.0/';
+    /** URL to NZ Post Prod API */
+    const NZPOST_PROD_API_URL = 'https://api.nzpost.co.nz/';
+
+    /** URL to NZ Post Test API */
+    const NZPOST_TEST_API_URL = 'http://api.uat.nzpost.co.nz/';
 
     /** Main app request timeout */
     const REQUEST_TIMEOUT = 120;
@@ -27,6 +30,12 @@ class NzPostClient implements NzPostClientInterface
      * @var bool
      */
     protected $debug = FALSE;
+
+    /**
+     * Turn on/off the production url
+     * @var bool
+     */
+    protected $prod = FALSE;
     /**
      * Your NZ Post Client ID
      * @var string
@@ -64,10 +73,11 @@ class NzPostClient implements NzPostClientInterface
      * @param string $secret
      * @param CacheInterface|NULL $Cache
      */
-    public function __construct($clientID, $secret, CacheInterface $Cache = NULL)
+    public function __construct($clientID, $secret, CacheInterface $Cache = NULL, $prod = false)
     {
         $this->clientID = $clientID;
         $this->secret = $secret;
+        $this->prod = $prod;
         if (NULL !== $Cache) {
             $this->Cache = $Cache;
 
@@ -130,46 +140,6 @@ class NzPostClient implements NzPostClientInterface
     }
 
     /**
-     * Searching for address by address details
-     * @param array $addressLines Address Line 1 ... Line 5
-     * @param string $type Type of addresses to search: 'Postal|Physical|All'
-     * @param int $max Maximum number of results to return.
-     * @return array
-     * @throws NzPostClientAPIException
-     */
-    public function find(array $addressLines, $type = 'All', $max = 10)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5(implode($addressLines) . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query([
-            'type' => $type,
-            'address_line_1' => (isset($addressLines[0]) ? $addressLines[0] : NULL),
-            'address_line_2' => (isset($addressLines[1]) ? $addressLines[1] : NULL),
-            'address_line_3' => (isset($addressLines[2]) ? $addressLines[2] : NULL),
-            'address_line_4' => (isset($addressLines[3]) ? $addressLines[3] : NULL),
-            'address_line_5' => (isset($addressLines[4]) ? $addressLines[4] : NULL),
-            'max' => $max,
-            'access_token' => $this->token,
-        ]);
-
-        $request = self::NZPOST_API_URL . 'find?' . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody['addresses'], $this->ttl);
-        }
-
-        return $responseBody['addresses'];
-    }
-
-    /**
      * @param string $request
      * @return array
      * @throws NzPostClientAPIException
@@ -180,7 +150,14 @@ class NzPostClient implements NzPostClientInterface
 
         curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);
 
-        curl_setopt($curlSession, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+        curl_setopt(
+            $curlSession,
+            CURLOPT_HTTPHEADER,
+            [
+                'Accept: application/json',
+                'Authorization: Bearer ' . $this->token
+            ]
+        );
         if ($this->debug) {
             curl_setopt($curlSession, CURLOPT_VERBOSE, TRUE);
         }
@@ -192,144 +169,6 @@ class NzPostClient implements NzPostClientInterface
         }
 
         return json_decode($response, TRUE);
-    }
-
-    /**
-     * @param $dpid
-     * @param string $type Type of addresses to search: 'Postal|Physical|All'
-     * @param int $max
-     * @return mixed
-     * @throws NzPostClientAPIException
-     */
-    public function details($dpid, $type = 'All', $max = 10)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($dpid . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query([
-            'dpid' => $dpid,
-            'type' => $type,
-            'max' => $max,
-            'access_token' => $this->token,
-        ]);
-
-        $request = self::NZPOST_API_URL . 'details?' . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody['details'], $this->ttl);
-        }
-
-        return $responseBody['details'];
-    }
-
-    /**
-     * @param $query
-     * @param string $type Type of addresses to search: 'Postal|Physical|All'
-     * @param int $max
-     * @return array
-     * @throws NzPostClientAPIException
-     */
-    public function suggest($query, $type = 'All', $max = 10)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query([
-            'q' => $query,
-            'type' => $type,
-            'max' => $max,
-            'access_token' => $this->token,
-        ]);
-
-        $request = self::NZPOST_API_URL . 'suggest?' . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody['addresses'], $this->ttl);
-        }
-
-        return $responseBody['addresses'];
-    }
-
-    /**
-     * @param $query
-     * @param string $orderRoadsFirst
-     * @param int $max
-     * @return array
-     * @throws NzPostClientAPIException
-     */
-    public function suggestPartial($query, $orderRoadsFirst = 'N', $max = 10)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $orderRoadsFirst . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query([
-            'q' => $query,
-            'order_roads_first' => $orderRoadsFirst,
-            'max' => $max,
-            'access_token' => $this->token,
-        ]);
-
-        $request = self::NZPOST_API_URL . 'suggest_partial?' . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody['addresses'], $this->ttl);
-        }
-
-        return $responseBody['addresses'];
-    }
-
-    /**
-     * @param $uniqueId
-     * @param int $max
-     * @return array
-     * @throws NzPostClientAPIException
-     */
-    public function partialDetails($uniqueId, $max = 10)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($uniqueId . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query([
-            'unique_id' => $uniqueId,
-            'max' => $max,
-            'access_token' => $this->token,
-        ]);
-
-        $request = self::NZPOST_API_URL . 'partial_details?' . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody['details'], $this->ttl);
-        }
-
-        return $responseBody['details'];
     }
 
     /**
@@ -422,6 +261,26 @@ class NzPostClient implements NzPostClientInterface
         $this->ttl = $ttl;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getProd()
+    {
+        return $this->prod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        if ($this->getProd()) {
+            return self::NZPOST_PROD_API_URL;
+        } else {
+            return self::NZPOST_TEST_API_URL;
+        }
     }
 
 }

@@ -1,8 +1,8 @@
 <?php
 
-use DShumkov\NzPostClient\NzPostClient;
+use DigitalPianism\NzPostClient\NzPostClient;
 
-class NzPostClientTest extends PHPUnit_Framework_TestCase
+class AddressCheckerTest extends PHPUnit_Framework_TestCase
 {
     public static $nzPostClient;
 
