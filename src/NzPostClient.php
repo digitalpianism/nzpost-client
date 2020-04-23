@@ -155,7 +155,8 @@ class NzPostClient
             CURLOPT_HTTPHEADER,
             [
                 'Accept: application/json',
-                'Authorization: Bearer ' . $this->token
+                'Authorization: Bearer ' . $this->token,
+                'client_id: ' . $this->clientID
             ]
         );
         if ($this->debug) {
