@@ -8,30 +8,20 @@ class ParcelTrack extends NzPostClient implements ParcelTrackInterface
     const NZPOST_API_ENDPOINT = 'parceltrack/3.0/parcels/';
 
     /**
-     * @param string $trackingReference
-     * @return array
+     * Query to return tracking information for a specific tracking reference.
+     *
+     * @param string $trackingReference The unique parcel identifier
+     * @return array Object containing the parcel and event detail
      * @throws NzPostClientAPIException
      */
     public function track($trackingReference)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
             . $trackingReference;
 
         $responseBody = $this->sendApiRequest($request);
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
+        return $responseBody['results'];
     }
 }

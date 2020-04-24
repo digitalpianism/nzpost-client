@@ -14,7 +14,7 @@ interface AddressCheckerInterface
     public function find(array $addressLines, $type = 'All', $max = 10);
 
     /**
-     * @param $dpid
+     * @param string $dpid
      * @param string $type
      * @param int $max
      * @return array
@@ -22,7 +22,7 @@ interface AddressCheckerInterface
     public function details($dpid, $type = 'All', $max = 10);
 
     /**
-     * @param $query
+     * @param string $query
      * @param string $type
      * @param int $max
      * @return array
@@ -30,7 +30,7 @@ interface AddressCheckerInterface
     public function suggest($query, $type = 'All', $max = 10);
 
     /**
-     * @param $query
+     * @param string $query
      * @param string $order_roads_first
      * @param int $max
      * @return array
@@ -38,7 +38,7 @@ interface AddressCheckerInterface
     public function suggestPartial($query, $order_roads_first = 'N', $max = 10);
 
     /**
-     * @param $unique_id
+     * @param string $unique_id
      * @param int $max
      * @return array
      */

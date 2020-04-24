@@ -141,10 +141,11 @@ class NzPostClient
 
     /**
      * @param string $request
+     * @param string $body
      * @return array
      * @throws NzPostClientAPIException
      */
-    protected function sendApiRequest($request)
+    protected function sendApiRequest($request, $body = "")
     {
         $curlSession = curl_init($request);
 
@@ -159,9 +160,15 @@ class NzPostClient
                 'client_id: ' . $this->clientID
             ]
         );
+        
         if ($this->debug) {
             curl_setopt($curlSession, CURLOPT_VERBOSE, TRUE);
         }
+        
+        if ($body) {
+            curl_setopt($curlSession, CURLOPT_POSTFIELDS, $body);
+        }
+        
         $response = curl_exec($curlSession);
         $responseCode = curl_getinfo($curlSession, CURLINFO_HTTP_CODE);
 
@@ -281,6 +288,28 @@ class NzPostClient
             return self::NZPOST_PROD_API_URL;
         } else {
             return self::NZPOST_TEST_API_URL;
+        }
+    }
+    
+    protected function validate($data, $schemaPath)
+    {
+        if (!file_exists($schemaPath)) {
+            throw new Exception(sprintf("schema file '%s' not found", $schemaPath));
+        }
+
+        $schema = (object)['$ref' => 'file://' . $schemaPath];
+
+        // Validate
+        $validator = new Validator;
+        $validator->validate($data, $schema);
+
+        if (!$validator->isValid()) {
+            $errors = ""
+            foreach ($validator->getErrors() as $error) {
+                $errors .= sprintf("[%s] %s\n", $error['property'], $error['message']);
+            }
+            
+            throw new \InvalidArgumentException("JSON does not validate. Violations: \n" . $errors);
         }
     }
 

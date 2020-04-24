@@ -8,5 +8,5 @@ interface ParcelPickupInterface
      * @param array $data
      * @return array
      */
-    public function booking($data);
+    public function booking(array $data);
 }

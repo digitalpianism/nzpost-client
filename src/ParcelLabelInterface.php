@@ -6,30 +6,24 @@ interface ParcelLabelInterface
 {
     /**
      * @param array $data
-     * @return array
+     * @return string
      */
-    public function createDomestic($data);
+    public function createLabel(array $data);
 
     /**
-     * @param array $data
-     * @return array
-     */
-    public function createInternational($data);
-
-    /**
-     * @param int $consignementId
+     * @param string $consignementId
      * @return array
      */
     public function getLabelStatus($consignementId);
 
     /**
-     * @param int $consignementId
+     * @param string $consignementId
      * @return array
      */
     public function getRelatedLabelStatus($consignementId);
 
     /**
-     * @param int $consignementId
+     * @param string $consignementId
      * @param string $format
      * @param int $page
      * @return array

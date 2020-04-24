@@ -8,12 +8,12 @@ interface ShippingOptionsInterface
      * @param array $data
      * @return array
      */
-    public function domestic($data);
+    public function domestic(array $data);
 
 
     /**
      * @param array $data
      * @return array
      */
-    public function international($data);
+    public function international(array $data);
 }

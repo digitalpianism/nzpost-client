@@ -8,32 +8,20 @@ class ParcelPickup extends NzPostClient implements ParcelPickupInterface
     const NZPOST_API_ENDPOINT = 'parcelpickup/v3/bookings/';
 
     /**
-     * @param string $trackingReference
-     * @return array
+     * Creates pick up event for requested Pace or CourierPost service.
+     * 
+     * @param array $data
+     * @return array Array of Result Elements
      * @throws NzPostClientAPIException
      */
-    public function booking($data)
+    public function booking(array $data)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query($data);
 
         $request = $this->getApiUrl()
-            . self::NZPOST_API_ENDPOINT
-            . $params;
+            . self::NZPOST_API_ENDPOINT;
 
-        $responseBody = $this->sendApiRequest($request);
+        $responseBody = $this->sendApiRequest($request, json_encode($data));
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
+        return $responseBody['results'];
     }
 }

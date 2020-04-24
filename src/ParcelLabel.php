@@ -1,5 +1,7 @@
 <?php
 
+use JsonSchema\Validator;
+
 namespace DigitalPianism\NzPostClient;
 
 class ParcelLabel extends NzPostClient implements ParcelLabelInterface
@@ -8,79 +10,43 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
     const NZPOST_API_ENDPOINT = 'parcellabel/v3/labels/';
 
     /**
+     * Request for creating labels. These labels are returned in either a PDF or PNG format.
+     *
      * @param array $data
-     * @return array
+     * @return string Unique identifier for the consignment if the request is successful.
      * @throws NzPostClientAPIException
      */
-    public function createDomestic($data)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query($data);
-
+    public function createLabel(array $data)
+    {        
         $request = $this->getApiUrl()
-            . self::NZPOST_API_ENDPOINT
-            . $params;
+            . self::NZPOST_API_ENDPOINT;
 
-        $responseBody = $this->sendApiRequest($request);
+        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        
+        $this->validate($data, $schemaPath)
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
+        $responseBody = $this->sendApiRequest($request, json_encode($data));
 
-        return $responseBody;
+        return $responseBody['consignment_id'];
     }
 
     /**
-     * @param array $data
-     * @return array
-     * @throws NzPostClientAPIException
-     */
-    public function createInternational($data)
-    {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
-        $params = http_build_query($data);
-
-        $request = $this->getApiUrl()
-            . self::NZPOST_API_ENDPOINT
-            . $params;
-
-        $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
-    }
-
-    /**
-     * @param int $consignementId
+     * Returns the status of all labels within a consignment.
+     * Note if webhook URL is not provided in the request for label generation, you will need to call the Status resource to get the status of the labels within a consignment.
+     * 
+     * @param string $consignementId Unique id of a consignment
      * @return array
      * @throws NzPostClientAPIException
      */
     public function getLabelStatus($consignementId)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
+        $data = [
+            'consignment_id' => $consignmentId
+        ];
 
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
+        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath)
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -89,58 +55,58 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
 
         $responseBody = $this->sendApiRequest($request);
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
         return $responseBody;
     }
 
     /**
-     * @param int $consignementId
-     * @return array
+     * Returns the status of all labels within a consignment and the other consignments in the same order.
+     * Note - Order number is put in to the senderreference2 field in creating label request.
+     * When a consignment id with that order number is queried with the 'related' resource, all consignments with the same order number specified in senderreference2 field are returned.
+     *
+     * @param string $consignmentId Unique id of a consignment
+     * @return array An array containing all consignments relating to the specific consignment within the same order.
      * @throws NzPostClientAPIException
      */
-    public function getRelatedLabelStatus($consignementId)
+    public function getRelatedLabelStatus($consignmentId)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
+        $data = [
+            'consignment_id' => $consignmentId
+        ];
 
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
+        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        
+        $this->validate($data, $schemaPath)
+            
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
-            . $consignementId
+            . $consignmentId
             . '/related';
 
         $responseBody = $this->sendApiRequest($request);
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
+        return $responseBody['consignments'];
     }
 
     /**
-     * @param int $consignementId
-     * @param string $format
-     * @param int $page
+     * Download all labels generated within a consignment:
+     *
+     * @param string $consignmentId The unique id of a consignment
+     * @param string $format The format of the labels to be downloaded. PDF if download all labels within a consignment. PNG if download a page image within a consignment
+     * @param int $page The page number if download a label
      * @return array
      */
-    public function downloadLabel($consignementId, $format, $page)
+    public function downloadLabel($consignmentId, $format, $page)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
+        $data = [
+            'consignment_id' => $consignmentId,
+            'format' => $format,
+            'page' => $page
+        ];
 
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
+        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        
+        $this->validate($data, $schemaPath)
+        
         $params = http_build_query([
             'format' => $format,
             'page' => $page,
@@ -148,15 +114,11 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
-            . $consignementId
+            . $consignmentId
+            . '?'
             . $params;
 
         $responseBody = $this->sendApiRequest($request);
-
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
         return $responseBody;
     }
 }

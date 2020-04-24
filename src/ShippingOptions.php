@@ -8,64 +8,44 @@ class ShippingOptions extends NzPostClient implements ShippingOptionsInterface
     const NZPOST_API_ENDPOINT = 'shippingoptions/2.0/';
 
     /**
-     * @param string $trackingReference
-     * @return array
+     * The domestic method is used to retrieve a list of valid shipping options available from a pickup address to a delivery address within New Zealand.
+     *
+     * @param array $data
+     * @return array Details regarding the services applicable to the input parameters
      * @throws NzPostClientAPIException
      */
-    public function domestic($data)
+    public function domestic(array $data)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
         $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
-            . 'domestic/'
+            . 'domestic?'
             . $params;
 
         $responseBody = $this->sendApiRequest($request);
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
+        return $responseBody['services'];
     }
 
     /**
-     * @param string $trackingReference
-     * @return array
+     * The international method is used to retrieve a list of valid shipping options available for a delivery address outside of New Zealand.
+     *
+     * @param array $data
+     * @return array Array listing applicable service codes
      * @throws NzPostClientAPIException
      */
     public function international($data)
     {
-        if ($this->cacheIsSet()) {
-            $cacheKey = $this->cachePrefix . md5($query . $type . strval($max));
-
-            if ($this->Cache->has($cacheKey)) {
-                return $this->Cache->get($cacheKey);
-            }
-        }
-
         $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
-            . 'international/'
+            . 'international?'
             . $params;
 
         $responseBody = $this->sendApiRequest($request);
 
-        if ($this->cacheIsSet()) {
-            $this->Cache->set($cacheKey, $responseBody, $this->ttl);
-        }
-
-        return $responseBody;
+        return $responseBody['services'];
     }
 }
