@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "suggestPartial",
+  "description": "Takes an address fragment, and returns a set of partial addresses that match the fragment.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "q": {
+        "type": "string",
+        "description": "Partial Address fragment to query."
+      },
+      "order_roads_first": {
+        "type": "string",
+        "enum": [
+          "Y",
+          "N"
+        ]
+        "description": "Partial addresses can include cities and roads. This option, if set to Y, will order roads before cities. Either Y, or N (default)."
+      },
+      "max": {
+        "type": "integer",
+        "description": "Maximum number of results to return (defaults to 10)."
+      },
+      "callback": {
+        "type": "string",
+        "description": "The JSONP callback function name."
+      }
+    },
+    "required": ["q"]
+  }
+}

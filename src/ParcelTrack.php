@@ -20,6 +20,14 @@ class ParcelTrack extends NzPostClient implements ParcelTrackInterface
             . self::NZPOST_API_ENDPOINT
             . $trackingReference;
 
+        $data = [
+            ' tracking_reference ' => $trackingReference
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
         $responseBody = $this->sendApiRequest($request);
 
         return $responseBody['results'];

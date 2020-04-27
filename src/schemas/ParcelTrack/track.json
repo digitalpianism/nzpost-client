@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "track",
+  "description": "Query to return tracking information for a specific tracking reference.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "tracking_reference": {
+        "type": "string",
+        "pattern": "^([a-zA-Z0-9])+$",
+        "description": "The parcel tracking reference that uniquely identifies this parcel"
+      }
+    }
+  }
+}

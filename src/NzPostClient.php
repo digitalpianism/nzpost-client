@@ -3,6 +3,7 @@
 namespace DigitalPianism\NzPostClient;
 
 use Psr\SimpleCache\CacheInterface;
+use JsonSchema\Validator;
 
 /**
  * Class NzPostClient
@@ -151,14 +152,21 @@ class NzPostClient
 
         curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);
 
+        $headers = [
+            'Accept: application/json',
+            'Authorization: Bearer ' . $this->token,
+            'client_id: ' . $this->clientID
+        ];
+
+        if ($body) {
+            $headers[] = 'Content-Type: application/json';
+        }
+
+
         curl_setopt(
             $curlSession,
             CURLOPT_HTTPHEADER,
-            [
-                'Accept: application/json',
-                'Authorization: Bearer ' . $this->token,
-                'client_id: ' . $this->clientID
-            ]
+            $headers
         );
         
         if ($this->debug) {
@@ -294,17 +302,17 @@ class NzPostClient
     protected function validate($data, $schemaPath)
     {
         if (!file_exists($schemaPath)) {
-            throw new Exception(sprintf("schema file '%s' not found", $schemaPath));
+            throw new \Exception(sprintf("schema file '%s' not found", $schemaPath));
         }
 
         $schema = (object)['$ref' => 'file://' . $schemaPath];
 
         // Validate
         $validator = new Validator;
-        $validator->validate($data, $schema);
+        $validator->check($data, $schema);
 
         if (!$validator->isValid()) {
-            $errors = ""
+            $errors = "";
             foreach ($validator->getErrors() as $error) {
                 $errors .= sprintf("[%s] %s\n", $error['property'], $error['message']);
             }

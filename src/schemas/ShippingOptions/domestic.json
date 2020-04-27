@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "domestic",
+  "description": "The domestic method is used to retrieve a list of valid shipping options available from a pickup address to a delivery address within New Zealand.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "pickup_address_id": {
+        "type": "string",
+        "description": "A validated CourierPost address ID which is used to identify an individual address from the domestic addressing API."
+      },
+      "pickup_site_code": {
+        "type": "string",
+        "description": "A validated site code which is used to identify an address where a courier is scheduled for regular pickups."
+      },
+      "pickup_dpid": {
+        "type": "string",
+        "description": "A validated dpid which is used to identify an address where a courier is scheduled for regular pickups."
+      },
+      "pickup_suburb": {
+        "type": "string",
+        "description": "A suburb name which is used to identify an address."
+      },
+      "pickup_city": {
+        "type": "string",
+        "description": "A city name which is used to identify an address."
+      },
+      "pickup_postcode": {
+        "type": "string",
+        "description": "A string containing the postcode from the pickup address."
+      },
+      "delivery_address_id": {
+        "type": "string",
+        "description": "A validated address ID which is used to identify an individual address from the domestic addressing API."
+      },
+      "delivery_site_code": {
+        "type": "string",
+        "description": "A validated site code which is used to identify an address where a courier is scheduled for regular pickups."
+      },
+      "delivery_suburb": {
+        "type": "string",
+        "description": "A string containing the suburb of the delivery address."
+      },
+      "delivery_city": {
+        "type": "string",
+        "description": "A city name which is used to identify an address"
+      },
+      "delivery_postcode": {
+        "type": "string",
+        "description": "A string containing the postcode of the delivery address."
+      },
+      "weight": {
+        "type": "number",
+        "minimum": 0.01,
+        "description": "The weight of the package being shipped in kilograms."
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The height measurement of the package being shipped in centimetres."
+      },
+      "length": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The length measurement of the package being shipped in centimetres."
+      },
+      "width": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The thickness, or width measurement of the package being shipped in centimetres."
+      },
+      "diameter": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The diameter of the tube being shipped in centimetres. Only used for tubes/cylindrical parcels."
+      },
+      "envelope_size": {
+        "type": "string",
+        "enum": [
+          "A4",
+          "A4B",
+          "A5",
+          "A5B",
+          "DL",
+          "FS",
+          "LF",
+          "CDL",
+          "CA5",
+          "CFS",
+          "XL"
+        ],
+        "description": "If fitting into a TrackPak envelope, submit envelope size or 'ALL' return shipping options with all envelope sizes."
+      }
+    },
+    "required": [
+      "weight",
+      "length"
+    ]
+  }
+}

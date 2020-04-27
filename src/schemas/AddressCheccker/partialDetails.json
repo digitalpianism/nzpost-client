@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "partialDetails",
+  "description": "Takes a partial's unique_id and returns detailed information about the matching partial address.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "unique_id": {
+        "type": "string",
+        "description": "The unique identifier of the partial address."
+      },
+      "max": {
+        "type": "integer",
+        "description": "Maximum number of results to return (defaults to 10)."
+      },
+      "callback": {
+        "type": "string",
+        "description": "The JSONP callback function name."
+      }
+    },
+    "required": ["unique_id"]
+  }
+}

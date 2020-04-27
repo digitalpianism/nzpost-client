@@ -1,0 +1,299 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "booking",
+  "description": "Creates pick up event for requested Pace or CourierPost service.",
+  "type": "object",
+  "properties": {
+    "carrier": {
+      "type": "string",
+      "enum": [
+        "COURIERPOST",
+        "PACE"
+      ],
+      "description": "Creates pick up event for requested Pace or CourierPost service."
+    },
+    "caller": {
+      "type": "string",
+      "description": "The person making the pick up request, e.g. Jane Jones"
+    },
+    "name": {
+      "type": "string",
+      "description": "The sender contact name, e.g. John Smith"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address for the delivery confirmation and notification, e.g. sender@example.com"
+    },
+    "phone": {
+      "type": "string",
+      "description": "The sender contact phone number, e.g. 09 367 9710"
+    },
+    "customer_reference": {
+      "type": "string",
+      "description": "A reference for the sender, e.g. ABC1234"
+    },
+    "tracking_references": {
+      "type": "array",
+      "description": "A list of tracking references",
+      "items": {
+        "type": "string"
+      }
+    },
+    "service_code": {
+      "type": "string",
+      "description": "Service code for the couier service, e.g. 3HRA"
+    },
+    "distance_km": {
+      "type": "number",
+      "description": "Distance for the delivery, e.g. 12"
+    },
+    "pickup_address": {
+      "type": "object",
+      "description": "The address for pick up, see below for field details",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The contact name at the location"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The contact phone number at the location, e.g. +64 9 367 9710"
+        },
+        "email": {
+          "type": "string",
+          "description": "The contact email address at the location, e.g. someone@example.com"
+        },
+        "company_name": {
+          "type": "string",
+          "description": "The company name at the address, e.g. Your Company"
+        },
+        "site_code": {
+          "type": "string",
+          "description": "The optional site code if known (other fields not required). e.g. 28979"
+        },
+        "unit_type": {
+          "type": "string",
+          "description": "The unit type, e.g. Suite"
+        },
+        "unit_value": {
+          "type": "string",
+          "description": "The unit value, e.g. 3"
+        },
+        "floor": {
+          "type": "string",
+          "description": "The floor, e.g. Level 2"
+        },
+        "building_name": {
+          "type": "string",
+          "description": "The building name, e.g. Highbrook Facility"
+        },
+        "street": {
+          "type": "string",
+          "description": "The consolidated street number and name, e.g. 122 Kerwyn Avenue"
+        },
+        "suburb": {
+          "type": "string",
+          "description": "The suburb, e.g. East Tamaki"
+        },
+        "city": {
+          "type": "string",
+          "description": "The city, e.g. Auckland"
+        },
+        "postcode": {
+          "type": "string",
+          "description": "The postcode, e.g. 2013"
+        },
+        "dpid": {
+          "type": "string",
+          "description": "The optional DPID if known (other fields not required), e.g. 147950"
+        },
+        "address_id": {
+          "type": "string",
+          "description": "The optional address ID if known, e.g. 1180809"
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Instructions for access at the location, e.g. Down the side of the building to the door at the back"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "address_id "
+          ]
+        },
+        {
+          "required": [
+            "dpid"
+          ]
+        },
+        {
+          "required": [
+            "site_code"
+          ]
+        },
+        {
+          "required": [
+            "suburb",
+            "city",
+            "postcode"
+          ]
+        }
+      ]
+    },
+    "delivery_address": {
+      "type": "object",
+      "description": "The address for delivery, see below for field details",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The contact name at the location"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The contact phone number at the location, e.g. +64 9 367 9710"
+        },
+        "email": {
+          "type": "string",
+          "description": "The contact email address at the location, e.g. someone@example.com"
+        },
+        "company_name": {
+          "type": "string",
+          "description": "The company name at the address, e.g. Your Company"
+        },
+        "site_code": {
+          "type": "string",
+          "description": "The optional site code if known (other fields not required). e.g. 28979"
+        },
+        "unit_type": {
+          "type": "string",
+          "description": "The unit type, e.g. Suite"
+        },
+        "unit_value": {
+          "type": "string",
+          "description": "The unit value, e.g. 3"
+        },
+        "floor": {
+          "type": "string",
+          "description": "The floor, e.g. Level 2"
+        },
+        "building_name": {
+          "type": "string",
+          "description": "The building name, e.g. Highbrook Facility"
+        },
+        "street": {
+          "type": "string",
+          "description": "The consolidated street number and name, e.g. 122 Kerwyn Avenue"
+        },
+        "suburb": {
+          "type": "string",
+          "description": "The suburb, e.g. East Tamaki"
+        },
+        "city": {
+          "type": "string",
+          "description": "The city, e.g. Auckland"
+        },
+        "postcode": {
+          "type": "string",
+          "description": "The postcode, e.g. 2013"
+        },
+        "dpid": {
+          "type": "string",
+          "description": "The optional DPID if known (other fields not required), e.g. 147950"
+        },
+        "address_id": {
+          "type": "string",
+          "description": "The optional address ID if known, e.g. 1180809"
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Instructions for access at the location, e.g. Down the side of the building to the door at the back"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "address_id"
+          ]
+        },
+        {
+          "required": [
+            "dpid"
+          ]
+        },
+        {
+          "required": [
+            "site_code"
+          ]
+        },
+        {
+          "required": [
+            "suburb",
+            "city",
+            "postcode"
+          ]
+        }
+      ]
+    },
+    "is_booking_confirm_required": {
+      "type": "boolean",
+      "description": "Indicates if a confirmation of the pick up booking is required, e.g. true"
+    },
+    "is_delivery_confirm_required": {
+      "type": "boolean",
+      "description": "Indicates if a confirmation of the delivery is required, e.g. true"
+    },
+    "confirmation_email": {
+      "type": "string",
+      "description": "Email address for confirmations, e.g. test@example.com"
+    },
+    "instructions": {
+      "type": "string",
+      "description": "A customer note, e.g. Package is sitting on the counter at reception"
+    },
+    "pickup_date_time": {
+      "type": "string",
+      "description": "Requested date and time of the pickup in ISO8601 format, e.g. 2015-11-16T22:23:48Z"
+    },
+    "parcel_quantity": {
+      "type": "number",
+      "description": "Quantity of packages to be picked up, e.g. 2"
+    },
+    "estimated_weight_kg": {
+      "type": "number",
+      "description": "Estimated total weight of the package in kilograms, e.g. 1.2"
+    },
+    "is_label_required": {
+      "type": "boolean",
+      "description": "Indicates whether the sender requires a label to be printed at the depot. Defaults to false"
+    }
+  },
+  "if": {
+    "properties": {
+      "carrier": {
+        "const": {
+          "type": "PACE"
+        }
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "carrier",
+      "caller",
+      "pickup_address",
+      "pickup_date_time",
+      "service_code",
+      "delivery_address",
+      "parcel_quantity"
+    ]
+  },
+  "else": {
+    "required": [
+      "carrier",
+      "caller",
+      "pickup_address",
+      "pickup_date_time"
+    ]
+  }
+}

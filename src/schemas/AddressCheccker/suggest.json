@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "suggest",
+  "description": "Takes an address fragment, and returns a set of addresses that match the fragment.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "q": {
+        "type": "string",
+        "description": "Address fragment to query."
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "All",
+          "Physical",
+          "Postal"
+        ],
+        "description": "Type of addresses to search. Either Postal, Physical, or All (default)."
+      },
+      "max": {
+        "type": "integer",
+        "description": "Maximum number of results to return (defaults to 10)."
+      },
+      "callback": {
+        "type": "string",
+        "description": "The JSONP callback function name."
+      }
+    },
+    "required": ["q"]
+  }
+}

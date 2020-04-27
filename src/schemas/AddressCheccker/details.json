@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "details",
+  "description": "Takes an address dpid, and returns detailed information about the matching address.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "All",
+          "Physical",
+          "Postal"
+        ],
+        "description": "Type of addresses to search. Either Postal, Physical, or All (default)."
+      },
+      "dpid": {
+        "type": "string",
+        "description": "The delivery point identifier"
+      },
+      "max": {
+        "type": "integer",
+        "description": "Maximum number of results to return (defaults to 10)."
+      },
+      "callback": {
+        "type": "string",
+        "description": "The JSONP callback function name."
+      }
+    }
+  }
+}

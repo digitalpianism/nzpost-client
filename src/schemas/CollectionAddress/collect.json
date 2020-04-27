@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "collect",
+  "description": "This resource uses an address_id to retrieve address details for the address_id and a list of nearby collection points.  The address_Id can be obtained using the “Search for Address” resource in the ParcelAddress API.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "address_id": {
+        "type": "string",
+        "description": "NZ Post address identifier"
+      },
+      "count": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10,
+        "description": "The number of parcel collection delivery location address records to be returned. Default is to return the closest location."
+      }
+    },
+    "required": ["address_id"]
+  }
+}

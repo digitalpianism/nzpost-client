@@ -38,6 +38,15 @@ class CollectionAddress extends NzPostClient implements CollectionAddressInterfa
             }
         }
 
+        $data = [
+            'address_id' => $addressId,
+            'count' =>  $count
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
         $params = http_build_query([
             'count' =>  $count
         ]);

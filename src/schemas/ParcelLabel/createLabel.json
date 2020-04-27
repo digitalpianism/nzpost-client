@@ -442,6 +442,7 @@
       "type": "array",
       "description": "An object containing the label details for each label in the consignment.",
       "items": {
+        "type": "object",
         "properties": {
           "parcel_details": {
             "type": "array",

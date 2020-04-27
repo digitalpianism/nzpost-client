@@ -21,9 +21,11 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT;
 
-        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $data = (object)$data;
         
-        $this->validate($data, $schemaPath)
+        $this->validate($data, $schemaPath);
 
         $responseBody = $this->sendApiRequest($request, json_encode($data));
 
@@ -34,19 +36,19 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
      * Returns the status of all labels within a consignment.
      * Note if webhook URL is not provided in the request for label generation, you will need to call the Status resource to get the status of the labels within a consignment.
      * 
-     * @param string $consignementId Unique id of a consignment
+     * @param string $consignmentId Unique id of a consignment
      * @return array
      * @throws NzPostClientAPIException
      */
-    public function getLabelStatus($consignementId)
+    public function getLabelStatus($consignmentId)
     {
         $data = [
             'consignment_id' => $consignmentId
         ];
 
-        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
 
-        $this->validate($data, $schemaPath)
+        $this->validate($data, $schemaPath);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -73,9 +75,9 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
             'consignment_id' => $consignmentId
         ];
 
-        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
         
-        $this->validate($data, $schemaPath)
+        $this->validate($data, $schemaPath);
             
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -103,9 +105,9 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
             'page' => $page
         ];
 
-        $schemaPath = realpath(__DIR__ . '/schemas/' __FILE__ . '/' . __FUNCTION__ . '.json');
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
         
-        $this->validate($data, $schemaPath)
+        $this->validate($data, $schemaPath);
         
         $params = http_build_query([
             'format' => $format,

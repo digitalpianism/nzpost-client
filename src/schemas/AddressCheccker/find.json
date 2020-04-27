@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "find",
+  "description": "Takes an address fragment, and returns a set of addresses that match the fragment.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "All",
+          "Physical",
+          "Postal"
+        ],
+        "description": "Type of addresses to search. Either Postal, Physical, or All (default)."
+      },
+      "address_line_1": {
+        "type": "string",
+        "description": "First line of address to query"
+      },
+      "address_line_2": {
+        "type": "string",
+        "description": "Other lines of address to query."
+      },
+      "address_line_3": {
+        "type": "string",
+        "description": "Other lines of address to query."
+      },
+      "address_line_4": {
+        "type": "string",
+        "description": "Other lines of address to query."
+      },
+      "address_line_5": {
+        "type": "string",
+        "description": "Other lines of address to query."
+      },
+      "max": {
+        "type": "integer",
+        "description": "Maximum number of results to return (defaults to 10)."
+      },
+      "callback": {
+        "type": "string",
+        "description": "The JSONP callback function name."
+      }
+    },
+    "required": ["address_line_1"]
+  }
+}

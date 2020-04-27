@@ -42,17 +42,21 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
             }
         }
 
-        $params = http_build_query(
-            [
-                'type' => $type,
-                'address_line_1' => (isset($addressLines[0]) ? $addressLines[0] : NULL),
-                'address_line_2' => (isset($addressLines[1]) ? $addressLines[1] : NULL),
-                'address_line_3' => (isset($addressLines[2]) ? $addressLines[2] : NULL),
-                'address_line_4' => (isset($addressLines[3]) ? $addressLines[3] : NULL),
-                'address_line_5' => (isset($addressLines[4]) ? $addressLines[4] : NULL),
-                'max' => $max,
-            ]
-        );
+        $data = [
+            'type' => $type,
+            'address_line_1' => (isset($addressLines[0]) ? $addressLines[0] : NULL),
+            'address_line_2' => (isset($addressLines[1]) ? $addressLines[1] : NULL),
+            'address_line_3' => (isset($addressLines[2]) ? $addressLines[2] : NULL),
+            'address_line_4' => (isset($addressLines[3]) ? $addressLines[3] : NULL),
+            'address_line_5' => (isset($addressLines[4]) ? $addressLines[4] : NULL),
+            'max' => $max,
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
+        $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -92,12 +96,18 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
                 return $this->Cache->get($cacheKey);
             }
         }
-
-        $params = http_build_query([
+        
+        $data = [
             'dpid' => $dpid,
             'type' => $type,
             'max' => $max,
-        ]);
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
+        $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -138,11 +148,17 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
             }
         }
 
-        $params = http_build_query([
+        $data = [
             'q' => $query,
             'type' => $type,
             'max' => $max
-        ]);
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
+        $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -182,12 +198,18 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
                 return $this->Cache->get($cacheKey);
             }
         }
-
-        $params = http_build_query([
+        
+        $data = [
             'q' => $query,
             'order_roads_first' => $orderRoadsFirst,
             'max' => $max,
-        ]);
+        ];
+
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $this->validate($data, $schemaPath);
+
+        $params = http_build_query($data);
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT

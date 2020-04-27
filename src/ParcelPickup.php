@@ -20,6 +20,12 @@ class ParcelPickup extends NzPostClient implements ParcelPickupInterface
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT;
 
+        $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
+
+        $data = (object)$data;
+
+        $this->validate($data, $schemaPath);
+
         $responseBody = $this->sendApiRequest($request, json_encode($data));
 
         return $responseBody['results'];
