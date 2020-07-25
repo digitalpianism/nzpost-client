@@ -97,13 +97,16 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
      * @param int $page The page number if download a label
      * @return array
      */
-    public function downloadLabel($consignmentId, $format, $page)
+    public function downloadLabel($consignmentId, $format, $page = null)
     {
         $data = [
             'consignment_id' => $consignmentId,
-            'format' => $format,
-            'page' => $page
+            'format' => $format
         ];
+
+        if ($page) {
+            $data['page'] = $page;
+        }
 
         $schemaPath = realpath(__DIR__ . '/schemas/' . basename(__FILE__, '.php') . '/' . __FUNCTION__ . '.json');
         
