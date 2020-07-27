@@ -52,7 +52,7 @@ class ParcelLabel extends NzPostClient implements ParcelLabelInterface
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
-            . $consignementId
+            . $consignmentId
             . '/status';
 
         $responseBody = $this->sendApiRequest($request);
