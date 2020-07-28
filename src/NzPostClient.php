@@ -2,7 +2,7 @@
 
 namespace DigitalPianism\NzPostClient;
 
-use NzPostClientAPIException;
+use DigitalPianism\NzPostClient\NzPostClientAPIException;
 use Psr\SimpleCache\CacheInterface;
 use JsonSchema\Validator;
 
