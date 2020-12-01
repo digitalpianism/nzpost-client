@@ -144,7 +144,7 @@ class NzPostClient
     /**
      * @param string $request
      * @param string $body
-     * @return array
+     * @return mixed
      * @throws NzPostClientAPIException
      */
     protected function sendApiRequest($request, $body = "")
@@ -185,7 +185,10 @@ class NzPostClient
             throw new NzPostClientAPIException($responseCode);
         }
 
-        return json_decode($response, TRUE);
+        $decodedJson = json_decode($response, TRUE);
+        return !is_null($decodedJson)
+            ? $decodedJson
+            : $response;
     }
 
     /**
