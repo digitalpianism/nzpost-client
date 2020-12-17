@@ -3,7 +3,7 @@
     "description": "NZ Post API client",
     "type": "library",
     "license": "MIT",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "authors": [
         {
             "name": "Raphael Petrini",
