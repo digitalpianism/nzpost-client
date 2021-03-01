@@ -16,7 +16,12 @@ class ShippingOptions extends NzPostClient implements ShippingOptionsInterface
      */
     public function domestic(array $data)
     {
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -37,7 +42,12 @@ class ShippingOptions extends NzPostClient implements ShippingOptionsInterface
      */
     public function international($data)
     {
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT

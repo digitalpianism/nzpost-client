@@ -56,7 +56,12 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
 
         $this->validate($data, $schemaPath);
 
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -107,7 +112,12 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
 
         $this->validate($data, $schemaPath);
 
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -158,7 +168,12 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
 
         $this->validate($data, $schemaPath);
 
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -209,7 +224,12 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
 
         $this->validate($data, $schemaPath);
 
-        $params = http_build_query($data);
+        $params = http_build_query(
+            $data,
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -248,10 +268,15 @@ class AddressChecker extends NzPostClient implements AddressCheckerInterface
             }
         }
 
-        $params = http_build_query([
-            'unique_id' => $uniqueId,
-            'max' => $max,
-        ]);
+        $params = http_build_query(
+            [
+                'unique_id' => $uniqueId,
+                'max' => $max,
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT

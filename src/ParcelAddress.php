@@ -35,10 +35,15 @@ class ParcelAddress extends NzPostClient implements ParcelAddressInterface
             }
         }
 
-        $params = http_build_query([
-            'q' => $query,
-            'count' => $count
-        ]);
+        $params = http_build_query(
+            [
+                'q' => $query,
+                'count' => $count
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -143,10 +148,15 @@ class ParcelAddress extends NzPostClient implements ParcelAddressInterface
             }
         }
 
-        $params = http_build_query([
-            'q' => $query,
-            'count' => $count
-        ]);
+        $params = http_build_query(
+            [
+                'q' => $query,
+                'count' => $count
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -187,11 +197,16 @@ class ParcelAddress extends NzPostClient implements ParcelAddressInterface
             }
         }
 
-        $params = http_build_query([
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'count' => $count
-        ]);
+        $params = http_build_query(
+            [
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'count' => $count
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
@@ -232,11 +247,16 @@ class ParcelAddress extends NzPostClient implements ParcelAddressInterface
             }
         }
 
-        $params = http_build_query([
-            'q' => $query,
-            'country_code'  =>  $countryCode,
-            'count' => $count
-        ]);
+        $params = http_build_query(
+            [
+                'q' => $query,
+                'country_code'  =>  $countryCode,
+                'count' => $count
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT

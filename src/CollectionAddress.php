@@ -47,9 +47,14 @@ class CollectionAddress extends NzPostClient implements CollectionAddressInterfa
 
         $this->validate($data, $schemaPath);
 
-        $params = http_build_query([
-            'count' =>  $count
-        ]);
+        $params = http_build_query(
+            [
+                'count' =>  $count
+            ],
+            "?",
+            "&",
+            PHP_QUERY_RFC3986
+        );
 
         $request = $this->getApiUrl()
             . self::NZPOST_API_ENDPOINT
