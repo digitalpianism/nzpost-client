@@ -169,15 +169,15 @@ class NzPostClient
             CURLOPT_HTTPHEADER,
             $headers
         );
-        
+
         if ($this->debug) {
             curl_setopt($curlSession, CURLOPT_VERBOSE, TRUE);
         }
-        
+
         if ($body) {
             curl_setopt($curlSession, CURLOPT_POSTFIELDS, $body);
         }
-        
+
         $response = curl_exec($curlSession);
         $responseCode = curl_getinfo($curlSession, CURLINFO_HTTP_CODE);
 
@@ -254,6 +254,14 @@ class NzPostClient
     }
 
     /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
      * @return string
      */
     public function getCachePrefix()
@@ -302,7 +310,7 @@ class NzPostClient
             return self::NZPOST_TEST_API_URL;
         }
     }
-    
+
     protected function validate($data, $schemaPath)
     {
         if (!file_exists($schemaPath)) {
@@ -320,7 +328,7 @@ class NzPostClient
             foreach ($validator->getErrors() as $error) {
                 $errors .= sprintf("[%s] %s\n", $error['property'], $error['message']);
             }
-            
+
             throw new \InvalidArgumentException("JSON does not validate. Violations: \n" . $errors);
         }
     }
